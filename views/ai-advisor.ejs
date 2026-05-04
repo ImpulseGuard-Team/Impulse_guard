@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>AI Advisor - Impulse Guard</title>
+<link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<div class="dashboard-container">
+  <aside class="sidebar">
+    <div class="brand">
+      <h1>Impulse Guard</h1>
+      <span class="badge-premium">Premium Tier</span>
+    </div>
+    <nav class="nav-menu">
+      <a href="/dashboard"   class="nav-btn">❖ Dashboard</a>
+      <a href="/insight"     class="nav-btn">❖ Insights</a>
+      <a href="/transactions" class="nav-btn">❖ Transactions</a>
+      <a href="/ai-advisor"  class="nav-btn active">❖ AI Advisor</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/auth/logout" class="nav-btn" style="margin-top:20px; justify-content:center; border:1px solid rgba(255,255,255,0.1);">Logout</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="top-header">
+      <h2>AI Financial Advisor</h2>
+      <div class="header-actions">
+        <div class="avatar"></div>
+      </div>
+    </header>
+
+    <div class="content-scroll">
+      <div class="dashboard-grid">
+
+        <!-- AI MESSAGE BANNER -->
+        <div class="card" style="grid-column:span 12; background:linear-gradient(135deg,#1e2338,#0f172a); border:1px solid rgba(99,102,241,0.25);">
+          <div style="display:flex; gap:20px; align-items:flex-start;">
+            <div style="font-size:36px; line-height:1;">🤖</div>
+            <div>
+              <h3 style="margin:0 0 8px; color:#a5b4fc;">Ethereal Guardian AI</h3>
+              <p style="color:#cbd5e1; line-height:1.7; margin:0;" id="aiMessage">Analyzing your financial footprint…</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOP CATEGORIES -->
+        <div class="card" style="grid-column:span 4;">
+          <h3 style="margin:0 0 16px;">Top Categories</h3>
+          <div id="categoryList" style="display:flex; flex-direction:column; gap:14px;"></div>
+        </div>
+
+        <!-- MONTHLY BREAKDOWN -->
+        <div class="card" style="grid-column:span 4;">
+          <h3 style="margin:0 0 16px;">Monthly Breakdown</h3>
+          <div id="monthBreakdown" style="display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+
+        <!-- RECOMMENDATIONS -->
+        <div class="card" style="grid-column:span 4; background:linear-gradient(135deg,rgba(30,35,56,0.8),rgba(15,23,42,0.8)); border:1px solid rgba(52,211,153,0.15);">
+          <h3 style="margin:0 0 16px; color:#34d399;">Recommendations</h3>
+          <ul id="recommendationsList" style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:12px;"></ul>
+        </div>
+
+        <!-- AI CHAT BOT -->
+        <div class="card" style="grid-column:span 12; display:flex; flex-direction:column; height:500px;">
+          <div class="card-header space-between" style="margin-bottom:12px;">
+            <h3 style="margin:0;">Interactive Guard Chat</h3>
+            <span class="badge-premium">Live AI</span>
+          </div>
+          
+          <div id="chatWindow" style="flex:1; overflow-y:auto; padding:15px; background:rgba(15,23,42,0.6); border-radius:12px; margin-bottom:15px; display:flex; flex-direction:column; gap:12px; border:1px solid rgba(255,255,255,0.05);">
+            <div style="background:rgba(129,140,248,0.1); color:#a5b4fc; padding:10px 14px; border-radius:12px; max-width:80%; align-self:flex-start; font-size:13px; line-height:1.5;">
+              Hello! I am your Ethereal Guardian. How can I help you manage your impulses today?
+            </div>
+          </div>
+
+          <form id="chatForm" style="display:flex; gap:10px;">
+            <input type="text" id="chatInput" placeholder="Ask about your spending, budgets, or impulse control..." 
+                   style="flex:1; background:#1e293b; border:1px solid rgba(100,116,139,0.3); border-radius:12px; padding:12px 16px; color:#fff; outline:none; font-size:14px;">
+            <button type="submit" class="btn-primary" style="padding:0 24px; width:auto; border-radius:12px;">Send</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+/* ── CHAT BOT LOGIC ── */
+const chatForm   = document.getElementById('chatForm');
+const chatInput  = document.getElementById('chatInput');
+const chatWindow = document.getElementById('chatWindow');
+const API_KEY    = "AIzaSyBH-Wjn2YR28b85CLyjEqlTi5T5QcEU6uc";
+
+function addMessage(text, isUser = false) {
+  const msg = document.createElement('div');
+  msg.style.padding      = '10px 14px';
+  msg.style.borderRadius = '12px';
+  msg.style.maxWidth     = '80%';
+  msg.style.fontSize     = '13px';
+  msg.style.lineHeight   = '1.5';
+  
+  if (isUser) {
+    msg.style.alignSelf  = 'flex-end';
+    msg.style.background = 'rgba(99,102,241,0.2)';
+    msg.style.color      = '#fff';
+    msg.style.border     = '1px solid rgba(99,102,241,0.3)';
+  } else {
+    msg.style.alignSelf  = 'flex-start';
+    msg.style.background = 'rgba(129,140,248,0.1)';
+    msg.style.color      = '#a5b4fc';
+  }
+  
+  msg.innerText = text;
+  chatWindow.appendChild(msg);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+chatForm.onsubmit = async (e) => {
+  e.preventDefault();
+  const text = chatInput.value.trim();
+  if (!text) return;
+
+  addMessage(text, true);
+  chatInput.value = '';
+
+  // Placeholder for AI thinking
+  const loadingMsg = document.createElement('div');
+  loadingMsg.innerText = 'Guardian is thinking...';
+  loadingMsg.style.color = '#64748b';
+  loadingMsg.style.fontSize = '12px';
+  loadingMsg.style.alignSelf = 'flex-start';
+  chatWindow.appendChild(loadingMsg);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: `You are a financial impulse control assistant called Ethereal Guardian. Help the user with this request: ${text}` }] }]
+      })
+    });
+
+    const data = await response.json();
+    loadingMsg.remove();
+
+    if (data.candidates && data.candidates[0].content.parts[0].text) {
+      addMessage(data.candidates[0].content.parts[0].text);
+    } else {
+      addMessage("I apologize, I encountered an error in my neural pathways. Please try again.");
+    }
+  } catch (error) {
+    loadingMsg.remove();
+    addMessage("Connection failed. My ethereal link is unstable.");
+    console.error(error);
+  }
+};
+
+/* ── ADVISOR DATA LOGIC ── */
+async function loadAdvisorData() {
+  const [txRes, spRes] = await Promise.all([
+    fetch('/api/spending/all'),
+    fetch('/api/spending')          // includes budget from server
+  ]);
+  const txData = await txRes.json();
+  const spData = await spRes.json();
+
+  if (txData.success) {
+    const budget = spData.success ? (spData.budget || 5000) : 5000;
+    analyzeData(txData.spendings, budget);
+  }
+}
+
+function analyzeData(transactions, monthlyBudget) {
+  const msgEl   = document.getElementById('aiMessage');
+  const catDiv  = document.getElementById('categoryList');
+  const monDiv  = document.getElementById('monthBreakdown');
+  const recList = document.getElementById('recommendationsList');
+
+  if (transactions.length === 0) {
+    msgEl.innerText = "You haven't added any transactions yet. Start logging your spending so I can provide personalised advice.";
+    catDiv.innerHTML = recList.innerHTML = '<p style="color:#475569; font-size:13px;">No data yet.</p>';
+    return;
+  }
+
+  /* ── AGGREGATE ── */
+  const total = transactions.reduce((s, t) => s + t.amount, 0);
+  const avg   = total / transactions.length;
+
+  // Category breakdown
+  const cats = {};
+  transactions.forEach(t => {
+    const c = t.category || 'Other';
+    cats[c] = (cats[c] || 0) + t.amount;
+  });
+  const sortedCats = Object.entries(cats).sort((a, b) => b[1] - a[1]);
+  const topCat     = sortedCats[0];
+
+  // Monthly breakdown
+  const months = {};
+  transactions.forEach(t => {
+    const m = new Date(t.date).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
+    months[m] = (months[m] || 0) + t.amount;
+  });
+  const sortedMonths = Object.entries(months).sort((a, b) => new Date(a[0]) - new Date(b[0]));
+
+  /* ── AI MESSAGE ── */
+  const dailyBudget  = monthlyBudget / 30;
+  const guardScore   = Math.max(0, Math.min(100, Math.round(100 * (1 - total / (monthlyBudget || 1)))));
+  let scoreDesc;
+  if (guardScore >= 70) scoreDesc = 'Your financial health looks strong 🟢';
+  else if (guardScore >= 40) scoreDesc = 'Moderate spending risk detected 🟡';
+  else scoreDesc = 'Significant overspending detected 🔴';
+
+  msgEl.innerHTML = `
+    ${scoreDesc}. You have spent <strong>₹${total.toFixed(2)}</strong> across
+    <strong>${transactions.length}</strong> transactions with an average of
+    <strong>₹${avg.toFixed(2)}</strong> per transaction.
+    Your monthly budget is <strong>₹${monthlyBudget}</strong> (≈ ₹${dailyBudget.toFixed(0)}/day).
+    Highest category: <strong>${topCat[0]}</strong> at ₹${topCat[1].toFixed(2)}.
+  `;
+
+  /* ── TOP CATEGORIES ── */
+  catDiv.innerHTML = '';
+  const colors = ['#818cf8','#34d399','#fbbf24','#f87171','#a78bfa','#38bdf8'];
+  sortedCats.forEach(([cat, amount], i) => {
+    const pct   = total ? ((amount / total) * 100).toFixed(1) : 0;
+    const color = colors[i % colors.length];
+    catDiv.innerHTML += `
+      <div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+          <span style="font-size:13px; color:#cbd5e1;">${cat}</span>
+          <span style="font-size:12px; color:#64748b;">₹${amount.toFixed(0)} (${pct}%)</span>
+        </div>
+        <div style="height:6px; background:rgba(15,23,42,0.8); border-radius:8px; overflow:hidden;">
+          <div style="height:100%; width:${pct}%; background:${color}; border-radius:8px;"></div>
+        </div>
+      </div>`;
+  });
+
+  /* ── MONTHLY BREAKDOWN ── */
+  monDiv.innerHTML = '';
+  const maxMonth = Math.max(...sortedMonths.map(m => m[1]), 1);
+  sortedMonths.reverse().forEach(([month, amount]) => {
+    const pct     = ((amount / maxMonth) * 100).toFixed(0);
+    const overBudget = amount > monthlyBudget;
+    const barColor   = overBudget ? '#f87171' : '#818cf8';
+    monDiv.innerHTML += `
+      <div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+          <span style="font-size:12px; color:#94a3b8;">${month}</span>
+          <span style="font-size:12px; font-weight:600; color:${overBudget ? '#f87171' : '#e2e8f0'};">₹${amount.toFixed(0)}${overBudget ? ' ⚠️' : ''}</span>
+        </div>
+        <div style="height:5px; background:rgba(15,23,42,0.8); border-radius:8px; overflow:hidden;">
+          <div style="height:100%; width:${pct}%; background:${barColor}; border-radius:8px;"></div>
+        </div>
+      </div>`;
+  });
+
+  /* ── RECOMMENDATIONS ── */
+  recList.innerHTML = '';
+  const recs = [];
+
+  if (cats['Entertainment'] && cats['Entertainment'] > monthlyBudget * 0.2)
+    recs.push({ icon: '📉', text: 'Entertainment exceeds 20% of your budget. Look for free alternatives.' });
+
+  if (cats['Dining'] && cats['Dining'] > monthlyBudget * 0.15)
+    recs.push({ icon: '🍱', text: 'Dining out is high. Meal prepping could save you significantly.' });
+
+  if (cats['Shopping'] && cats['Shopping'] > monthlyBudget * 0.3)
+    recs.push({ icon: '🛍️', text: 'Shopping is over 30% of budget. Apply a 24-hour rule before purchases.' });
+
+  if (avg > dailyBudget)
+    recs.push({ icon: '⚠️', text: `Average transaction (₹${avg.toFixed(0)}) exceeds your daily limit (₹${dailyBudget.toFixed(0)}).` });
+
+  if (total > monthlyBudget)
+    recs.push({ icon: '🚨', text: `You have exceeded your monthly budget of ₹${monthlyBudget} by ₹${(total - monthlyBudget).toFixed(0)}.` });
+
+  if (recs.length === 0)
+    recs.push({ icon: '✅', text: 'Your spending is well within limits across all categories. Keep it up!' });
+
+  recs.forEach(r => {
+    recList.innerHTML += `
+      <li style="display:flex; gap:10px; align-items:flex-start; color:#cbd5e1; font-size:13px; line-height:1.5;">
+        <span style="font-size:16px;">${r.icon}</span>
+        <span>${r.text}</span>
+      </li>`;
+  });
+}
+
+loadAdvisorData();
+</script>
+
+</body>
+</html>

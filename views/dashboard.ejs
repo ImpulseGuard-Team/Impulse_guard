@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Dashboard</title>
+<link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<div class="dashboard-container">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <h1>Impulse Guard</h1>
+      <span class="badge-premium">Premium Tier</span>
+    </div>
+
+    <nav class="nav-menu">
+      <a href="/dashboard" class="nav-btn active">❖ Dashboard</a>
+      <a href="/insight" class="nav-btn">❖ Insights</a>
+      <a href="/transactions" class="nav-btn">❖ Transactions</a>
+      <a href="/ai-advisor" class="nav-btn">❖ AI Advisor</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="/auth/logout" class="nav-btn" style="margin-top:20px; justify-content:center; border: 1px solid rgba(255,255,255,0.1);">Logout</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <header class="top-header">
+      <h2>Welcome, <%= user.name %>!</h2>
+      <div class="header-actions">
+        <button class="btn-primary" id="addBtn" style="padding: 8px 16px; width: auto;">+ Add Spending</button>
+        <input type="text" class="search-input" placeholder="Analyze finances…" />
+        <div class="avatar"></div>
+      </div>
+    </header>
+
+    <div class="content-scroll">
+      <div class="dashboard-grid">
+        
+        <!-- GUARD SCORE CARD -->
+        <div class="card score-card">
+          <div class="card-header">
+            <span style="color:#94a3b8; font-size:12px; text-transform:uppercase; font-weight:bold;">Guard Status</span>
+          </div>
+          <p class="subtitle">Monthly Budget Guard Score</p>
+          <div class="score-display">
+            <h2 id="score">--</h2>
+            <span style="color:#94a3b8;">/100</span>
+          </div>
+          <p class="subtitle" id="msg" style="margin-top:8px; font-size:14px; min-height:40px; line-height:1.4;"></p>
+          <div class="progress-bar">
+            <div id="bar" class="progress-fill" style="width: 0%; background: #34d399;"></div>
+          </div>
+        </div>
+
+        <!-- SPENDING CHART CARD -->
+        <div class="card chart-card">
+          <div class="card-header space-between">
+            <div>
+              <h3 style="margin:0;">Spending Trajectory</h3>
+              <p class="subtitle">Real-time analysis vs. AI projections</p>
+            </div>
+          </div>
+          
+          <div class="svg-container" style="background: rgba(15,23,42,0.3); border-radius: 12px; padding: 10px;">
+            <canvas id="chart" width="560" height="180" style="width:100%; height:180px;"></canvas>
+          </div>
+          
+          <div class="chart-labels">
+            <span>START</span>
+            <span>TREND</span>
+            <span>TODAY</span>
+          </div>
+        </div>
+
+        <!-- VIGILANCE LOG -->
+        <div class="card log-card span-7">
+          <div class="card-header space-between">
+            <h3 style="margin:0;">Today's Vigilance Log</h3>
+          </div>
+          <div class="transaction-list" id="list">
+            <!-- Transactions injected via JS -->
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN (Snapshots) -->
+        <div class="right-column span-5">
+          
+          <div class="snapshot-container">
+            <div class="snapshot-card" style="background: rgba(129,140,248,0.1);">
+              <p style="color:#a5b4fc; font-size:12px; margin:0;">Monthly Budget (Click to edit)</p>
+              <h2 id="budgetDisplay" style="color:white; margin-top:5px; cursor:pointer;" onclick="editBudget()">₹<span id="budgetValue"><%= user.budget || 5000 %></span></h2>
+            </div>
+          </div>
+
+          <div class="snapshot-container">
+            <div class="snapshot-card">
+              <p style="color:#94a3b8; font-size:12px; margin:0;">Transactions Today</p>
+              <h2 id="blocked" style="color:white; margin-top:5px;">0</h2>
+            </div>
+            <div class="snapshot-card success">
+              <p id="savedLabel" style="color:#94a3b8; font-size:12px; margin:0;">Remaining Amount</p>
+              <h2 id="saved" style="margin-top:5px;">₹0</h2>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h3 id="modalTitle" style="margin-top:0;">Add Spending</h3>
+    <form id="spendingForm">
+      <input type="hidden" id="spendingId">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" id="title" required>
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="category" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: white;">
+          <option value="Entertainment">Entertainment</option>
+          <option value="Groceries">Groceries</option>
+          <option value="Dining">Dining</option>
+          <option value="Transport">Transport</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Other" selected>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Amount (₹)</label>
+        <input type="number" id="amount" step="0.01" required>
+      </div>
+      <button type="submit" class="btn-primary">Save Transaction</button>
+    </form>
+  </div>
+</div>
+
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>

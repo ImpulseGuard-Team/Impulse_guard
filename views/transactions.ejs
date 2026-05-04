@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Transactions - Impulse Guard</title>
+<link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<div class="dashboard-container">
+  <aside class="sidebar">
+    <div class="brand">
+      <h1>Impulse Guard</h1>
+      <span class="badge-premium">Premium Tier</span>
+    </div>
+    <nav class="nav-menu">
+      <a href="/dashboard"    class="nav-btn">❖ Dashboard</a>
+      <a href="/insight"      class="nav-btn">❖ Insights</a>
+      <a href="/transactions" class="nav-btn active">❖ Transactions</a>
+      <a href="/ai-advisor"   class="nav-btn">❖ AI Advisor</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/auth/logout" class="nav-btn" style="margin-top:20px; justify-content:center; border:1px solid rgba(255,255,255,0.1);">Logout</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="top-header">
+      <h2>Transaction History</h2>
+      <div class="header-actions">
+        <input type="text" class="search-input" placeholder="Search by title or category…" id="searchInput" oninput="renderAll()"/>
+        <div class="avatar"></div>
+      </div>
+    </header>
+
+    <div class="content-scroll">
+      <div class="dashboard-grid">
+
+        <!-- SUMMARY STATS (only 2) -->
+        <div class="card" style="grid-column:span 6;">
+          <p class="subtitle" style="margin:0 0 6px;">Total Spends</p>
+          <h2 id="totalSpent" style="margin:0; font-size:36px; background:linear-gradient(180deg,#fff,#94a3b8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">₹0</h2>
+        </div>
+
+        <div class="card" style="grid-column:span 6;">
+          <p class="subtitle" style="margin:0 0 6px;">Total Transactions</p>
+          <h2 id="totalCount" style="margin:0; font-size:36px; color:#a5b4fc;">0</h2>
+        </div>
+
+        <!-- TRANSACTION HISTORY -->
+        <div class="card" style="grid-column:span 12;">
+          <div class="card-header space-between">
+            <h3 style="margin:0;">All Transactions</h3>
+            <span id="txCount" style="color:#64748b; font-size:13px;"></span>
+          </div>
+          <div class="transaction-list" id="allList">
+            <p class="subtitle" style="text-align:center; padding:20px 0;">Loading…</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  let allTransactions = [];
+
+  async function init() {
+    const res  = await fetch('/api/spending/all');
+    const data = await res.json();
+    if (data.success) {
+      allTransactions = data.spendings;
+      renderStats(allTransactions);
+      renderAll();
+    }
+  }
+
+  function renderStats(txs) {
+    const total = txs.reduce((s, t) => s + t.amount, 0);
+    document.getElementById('totalSpent').innerText = txs.length === 0 ? '₹0' : '₹' + total.toFixed(2);
+    document.getElementById('totalCount').innerText = txs.length;
+  }
+
+  function renderAll() {
+    const list  = document.getElementById('allList');
+    const query = document.getElementById('searchInput').value.toLowerCase();
+
+    const filtered = allTransactions.filter(t =>
+      t.title.toLowerCase().includes(query) ||
+      (t.category || '').toLowerCase().includes(query)
+    );
+
+    document.getElementById('txCount').innerText = filtered.length + ' record' + (filtered.length !== 1 ? 's' : '');
+
+    if (filtered.length === 0) {
+      list.innerHTML = "<p style='color:#475569; text-align:center; padding:24px 0;'>No transactions found.</p>";
+      return;
+    }
+
+    list.innerHTML = '';
+    filtered.forEach(t => {
+      const dateStr = new Date(t.date).toLocaleDateString('en-IN', {
+        day: '2-digit', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+
+      let statusText, statusClass;
+      if (t.amount > 500)      { statusText = 'IMPULSIVE'; statusClass = 'status-impulsive'; }
+      else if (t.amount > 100) { statusText = 'RISKY';     statusClass = 'status-risky'; }
+      else                     { statusText = 'SAFE';      statusClass = 'status-safe'; }
+
+      list.innerHTML += `
+        <div class="transaction-item">
+          <div>
+            <h4 style="margin:0;">${t.title}</h4>
+            <p style="margin:4px 0 0; color:#94a3b8; font-size:12px;">${t.category || 'Other'} • ${dateStr}</p>
+          </div>
+          <div style="text-align:right;">
+            <p style="margin:0 0 4px; font-weight:bold;">₹${t.amount.toFixed(2)}</p>
+            <span class="${statusClass}">${statusText}</span>
+          </div>
+        </div>`;
+    });
+  }
+
+  init();
+</script>
+
+</body>
+</html>

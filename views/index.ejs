@@ -1,118 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Impulse Guard</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impulse Guard - Stop Impulse Buying with AI</title>
+    <meta name="description" content="Impulse Guard monitors your spending and helps you control emotional purchases with AI-driven insights.">
+    <link rel="stylesheet" href="/css/landing.css">
 </head>
-<body class="min-h-screen bg-[#0B1326] text-[#DAE2FD]">
+<body>
 
-  <!-- Header -->
-  <header class="fixed left-1/2 top-0 z-50 w-full max-w-[1280px] -translate-x-1/2 px-8 pt-0">
-    <div class="mt-0 flex h-20 items-center justify-between px-8 backdrop-blur-[24px]">
-      <div class="flex items-center gap-8">
-        <span class="text-[20px] font-bold leading-7 tracking-[-0.05em] text-[#F1F5F9]">Impulse Guard</span>
-        <nav class="hidden items-center gap-8 md:flex">
-          <a href="#features" class="border-b-2 border-[#818CF8] pb-1 text-sm font-semibold tracking-[-0.025em] text-[#A5B4FC]">Features</a>
-          <a href="/dashboard" class="text-sm font-semibold tracking-[-0.025em] text-[#A5B4FC] hover:text-[#DAE2FD]">Dashboard</a>
-          <a href="/insight" class="text-sm font-semibold tracking-[-0.025em] text-[#A5B4FC] hover:text-[#DAE2FD]">Insights</a>
+    <!-- ── HEADER ──────────────────────────────────────────────── -->
+    <header class="site-header">
+        <span class="header-brand">Impulse Guard</span>
+
+        <nav class="header-nav">
+            <a href="#features" class="active">Features</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/insight">Insights</a>
         </nav>
-      </div>
 
-      <div class="flex items-center gap-4">
-        <button onclick="window.location.href='/login'" class="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(163deg,rgba(192,193,255,1)_0%,rgba(75,77,216,1)_100%)] px-5 py-2 text-sm font-semibold text-[#0B1326] transition hover:opacity-90">
-          Get Started
+        <button class="btn-get-started" onclick="window.location.href='/login'">
+            Get Started
         </button>
-      </div>
-    </div>
-  </header>
+    </header>
 
-  <main class="mx-auto flex w-full max-w-[1440px] flex-col items-stretch gap-20 pb-32">
-    <!-- Hero Section -->
-    <section class="flex flex-col items-center px-8 pb-32 pt-48">
-      <div class="flex max-w-[1152px] flex-col items-center gap-8">
-        <div class="inline-flex items-center gap-2 rounded-full border border-[rgba(70,69,85,0.15)] bg-[#222A3D] px-3 py-1">
-          <span class="h-2 w-2 rounded-full bg-[#4EDEA3]"></span>
-          <span class="text-[10px] font-bold uppercase tracking-[0.1em] text-[#4EDEA3]">AI-Powered Defense v2.4</span>
-        </div>
+    <!-- ── MAIN CONTENT ──────────────────────────────────────────── -->
+    <main>
 
-        <h1 class="text-center text-[56px] font-black leading-none tracking-[-0.04em] md:text-[96px]">
-          Stop Impulse<br />Buying with AI.
-        </h1>
+        <!-- HERO -->
+        <section class="hero">
 
-        <p class="max-w-[672px] text-center text-[18px] leading-[1.333] text-[rgba(199,196,216,0.8)] md:text-[24px]">
-          Protect your wealth with an ethereal guardian. Impulse Guard monitors your digital footprint to intercept emotional spending before it happens.
-        </p>
+            <div class="badge">
+                <span class="badge-dot"></span>
+                <span class="badge-text">AI-Powered Defense v2.4</span>
+            </div>
 
-        <div class="flex flex-col items-center gap-4 sm:flex-row">
-          <button onclick="window.location.href='/login'" class="inline-flex items-center justify-center rounded-[48px] px-10 py-4 bg-[linear-gradient(162deg,rgba(192,193,255,1)_0%,rgba(75,77,216,1)_100%)] text-sm font-semibold text-[#0B1326] shadow-[0_10px_30px_rgba(0,0,0,0.25)] transition hover:opacity-90">Get Started</button>
-          <button onclick="window.location.href='/login'" class="inline-flex items-center justify-center rounded-[48px] px-10 py-4 border border-[rgba(70,69,85,0.15)] bg-transparent text-sm font-semibold text-[#DAE2FD] transition hover:bg-[rgba(70,69,85,0.1)]">Try Demo</button>
-        </div>
+            <h1>Stop Impulse<br>Buying with AI.</h1>
 
-        <div class="w-full pt-24">
-          <div class="relative overflow-hidden rounded-[48px] border border-[rgba(70,69,85,0.1)] bg-[#222A3D] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] backdrop-blur-[20px]">
-            <div class="opacity-60 h-[646px] w-full bg-[rgba(11,19,38,0.5)]"></div>
-            <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(0deg,rgba(11,19,38,1)_0%,rgba(11,19,38,0)_50%,rgba(11,19,38,0)_100%)]"></div>
-          </div>
-        </div>
-      </div>
-    </section>
+            <p class="hero-sub">
+                Protect your wealth with an ethereal guardian. Impulse Guard
+                monitors your digital footprint to intercept emotional spending
+                before it happens.
+            </p>
 
-    <!-- Features -->
-    <section id="features" class="mx-auto w-full max-w-[1152px] px-8">
-      <div class="flex flex-col items-center gap-6">
-        <h2 class="text-center text-[48px] font-extrabold leading-[1.05] tracking-[-0.03em] text-[#DAE2FD]">The Guardian Ecosystem</h2>
-        <p class="text-center text-[18px] leading-[1.6] text-[rgba(199,196,216,0.8)]">Intelligent protection layers built for the modern consumer.</p>
-      </div>
+            <div class="hero-actions">
+                <button class="btn-hero-primary" onclick="window.location.href='/login'">
+                    Get Started
+                </button>
+                <button class="btn-hero-outline" onclick="window.location.href='/login'">
+                    Try Demo
+                </button>
+            </div>
 
-      <div class="mt-12 grid gap-6 md:grid-cols-3">
-        <!-- Card 1 -->
-        <article class="flex flex-col overflow-hidden rounded-[48px] border border-[rgba(70,69,85,0.1)] bg-[rgba(34,42,61,1)]">
-          <div class="flex flex-col gap-4 p-8">
-            <h3 class="text-[20px] font-bold leading-7 tracking-[-0.05em] text-[#DAE2FD]">Spending analysis</h3>
-            <p class="whitespace-pre-line text-sm leading-[1.6] text-[rgba(199,196,216,0.8)]">Deep-dive into the 'why' behind your purchases. Uncover emotional triggers and seasonal patterns.</p>
-          </div>
-        </article>
+            <div class="hero-preview">
+                Dashboard Preview — Log in to see your spending analytics
+            </div>
 
-        <!-- Card 2 -->
-        <article class="flex flex-col overflow-hidden rounded-[48px] border border-[rgba(70,69,85,0.1)] bg-[rgba(34,42,61,1)]">
-          <div class="flex flex-col gap-4 p-8">
-            <h3 class="text-[20px] font-bold leading-7 tracking-[-0.05em] text-[#DAE2FD]">Predictive guardrails</h3>
-            <p class="whitespace-pre-line text-sm leading-[1.6] text-[rgba(199,196,216,0.8)]">AI forecasts risk windows and places friction before checkout. Always on, always learning.</p>
-          </div>
-        </article>
+        </section>
 
-        <!-- Card 3 -->
-        <article class="flex flex-col overflow-hidden rounded-[48px] border border-[rgba(70,69,85,0.1)] bg-[rgba(34,42,61,1)]">
-          <div class="flex flex-col gap-4 p-8">
-            <h3 class="text-[20px] font-bold leading-7 tracking-[-0.05em] text-[#DAE2FD]">Guardian AI</h3>
-            <p class="whitespace-pre-line text-sm leading-[1.6] text-[rgba(199,196,216,0.8)]">A calm, private co-pilot that nudges you back to your goals. Less guilt, more control.</p>
-          </div>
-        </article>
-      </div>
-    </section>
+        <!-- FEATURES -->
+        <section class="features" id="features">
 
-    <!-- CTA -->
-    <section class="mx-auto w-full max-w-[1152px] px-8">
-      <div class="relative overflow-hidden rounded-[48px] border border-[rgba(70,69,85,0.1)] bg-[#222A3D] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] backdrop-blur-[20px]">
-        <div class="flex flex-col items-center gap-8 px-8 py-16 text-center">
-          <h2 class="text-[40px] font-extrabold leading-[1.05] tracking-[-0.03em] md:text-[56px]">
-            Ready to take control of<br />your financial destiny?
-          </h2>
+            <h2>The Guardian Ecosystem</h2>
+            <p class="features-sub">
+                Intelligent protection layers built for the modern consumer.
+            </p>
 
-          <div class="flex flex-col items-center gap-4 sm:flex-row">
-            <button onclick="window.location.href='/login'" class="inline-flex items-center justify-center rounded-[48px] px-10 py-4 bg-[linear-gradient(163deg,rgba(192,193,255,1)_0%,rgba(75,77,216,1)_100%)] text-sm font-semibold text-[#0B1326] transition hover:opacity-90">Join the Waitlist</button>
-            <button onclick="window.location.href='/login'" class="inline-flex items-center justify-center rounded-[48px] border border-[rgba(129,140,248,0.45)] bg-[#0B1326] px-10 py-4 text-sm font-semibold text-[#DAE2FD] transition hover:bg-[rgba(70,69,85,0.1)]">Talk to an Advisor</button>
-          </div>
-        </div>
-      </div>
-    </section>
+            <div class="features-grid">
 
-  </main>
+                <article class="feature-card">
+                    <h3>Spending analysis</h3>
+                    <p>
+                        Deep-dive into the 'why' behind your purchases.
+                        Uncover emotional triggers and seasonal patterns.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <h3>Predictive guardrails</h3>
+                    <p>
+                        AI forecasts risk windows and places friction before
+                        checkout. Always on, always learning.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <h3>Guardian AI</h3>
+                    <p>
+                        A calm, private co-pilot that nudges you back to your
+                        goals. Less guilt, more control.
+                    </p>
+                </article>
+
+            </div>
+
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <div class="cta-box">
+                <h2>Ready to take control of<br>your financial destiny?</h2>
+                <div class="cta-actions">
+                    <button class="btn-cta-primary" onclick="window.location.href='/login'">
+                        Get Started
+                    </button>
+                    <button class="btn-cta-outline" onclick="window.location.href='/login'">
+                        Talk to an Advisor
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
 
 </body>
 </html>

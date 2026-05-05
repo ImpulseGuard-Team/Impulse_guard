@@ -1,92 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Insights - Impulse Guard</title>
-<link rel="stylesheet" href="css/dashboard.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insights - Impulse Guard</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
 
 <div class="dashboard-container">
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="brand">
-      <h1>Impulse Guard</h1>
-      <span class="badge-premium">Premium Tier</span>
-    </div>
 
-    <nav class="nav-menu">
-      <a href="/dashboard" class="nav-btn">❖ Dashboard</a>
-      <a href="/insight" class="nav-btn active">❖ Insights</a>
-      <a href="/transactions" class="nav-btn">❖ Transactions</a>
-      <a href="/ai-advisor" class="nav-btn">❖ AI Advisor</a>
-    </nav>
+    <!-- ── SIDEBAR ──────────────────────────────────────────── -->
+    <aside class="sidebar">
+        <div class="brand">
+            <h1>Impulse Guard</h1>
+            <span class="badge-premium">Premium Tier</span>
+        </div>
 
-    <div class="sidebar-footer">
-      <a href="/auth/logout" class="nav-btn" style="margin-top:20px; justify-content:center; border: 1px solid rgba(255,255,255,0.1);">Logout</a>
-    </div>
-  </aside>
+        <nav class="nav-menu">
+            <a href="/dashboard"    class="nav-btn">❖ Dashboard</a>
+            <a href="/insight"      class="nav-btn active">❖ Insights</a>
+            <a href="/transactions" class="nav-btn">❖ Transactions</a>
+            <a href="/ai-advisor"   class="nav-btn">❖ AI Advisor</a>
+        </nav>
 
-  <!-- MAIN CONTENT -->
-  <main class="main-content">
-    <header class="top-header">
-      <h2>Insights</h2>
-      <div class="header-actions">
-        <div class="avatar"></div>
-      </div>
-    </header>
+        <div class="sidebar-footer">
+            <a href="/auth/logout"
+               class="nav-btn"
+               style="margin-top:20px; justify-content:center; border:1px solid rgba(255,255,255,0.1);">
+                Logout
+            </a>
+        </div>
+    </aside>
 
-    <div class="content-scroll">
-      <div class="dashboard-grid">
+    <!-- ── MAIN CONTENT ─────────────────────────────────────── -->
+    <main class="main-content">
 
-        <!-- SPENDING VELOCITY CHART -->
-        <div class="card chart-card" style="grid-column: span 8;">
-          <div class="card-header space-between">
-            <div>
-              <h3 style="margin:0;">Spending Velocity</h3>
-              <p class="subtitle">Daily spend totals across all your transactions</p>
+        <header class="top-header">
+            <h2>Insights</h2>
+            <div class="header-actions">
+                <div class="avatar"></div>
             </div>
-            <span id="trendLabel" style="color:#34d399; font-size:13px; font-weight:600;"></span>
-          </div>
+        </header>
 
-          <div class="svg-container" style="background: rgba(15,23,42,0.3); border-radius: 12px; padding: 10px;">
-            <canvas id="insightChart" width="560" height="180" style="width:100%; height:180px;"></canvas>
-          </div>
+        <div class="content-scroll">
+            <div class="dashboard-grid">
 
-          <div class="chart-labels" id="chartLabels" style="display:flex; justify-content:space-between; margin-top:12px; font-size:10px; color:#475569; text-transform:uppercase;">
-          </div>
+                <!-- SPENDING VELOCITY CHART -->
+                <div class="card chart-card" style="grid-column:span 8;">
+                    <div class="card-header space-between">
+                        <div>
+                            <h3 style="margin:0;">Spending Velocity</h3>
+                            <p class="subtitle">Daily spend totals across all your transactions</p>
+                        </div>
+                        <span id="trendLabel"
+                              style="color:#34d399; font-size:13px; font-weight:600;">
+                        </span>
+                    </div>
+
+                    <div class="svg-container"
+                         style="background:rgba(15,23,42,0.3); border-radius:12px; padding:10px;">
+                        <canvas id="insightChart" width="560" height="180"
+                                style="width:100%; height:180px;"></canvas>
+                    </div>
+
+                    <div id="chartLabels"
+                         style="display:flex; justify-content:space-between; margin-top:12px;
+                                font-size:10px; color:#475569; text-transform:uppercase;">
+                    </div>
+                </div>
+
+                <!-- CATEGORY PULSE -->
+                <div class="card" style="grid-column:span 4;">
+                    <h3 style="margin:0 0 20px;">Category Pulse</h3>
+                    <div id="categoryList">
+                        <p class="subtitle">Loading…</p>
+                    </div>
+                </div>
+
+                <!-- TOTAL STATS ROW -->
+                <div class="card" style="grid-column:span 4;">
+                    <p class="subtitle" style="margin:0 0 6px;">Total Spent (All Time)</p>
+                    <h2 id="totalSpent"
+                        style="margin:0; font-size:32px;
+                               background:linear-gradient(180deg,#fff,#94a3b8);
+                               -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+                        —
+                    </h2>
+                </div>
+
+                <div class="card" style="grid-column:span 4;">
+                    <p class="subtitle" style="margin:0 0 6px;">Highest Single Spend</p>
+                    <h2 id="maxSpent" style="margin:0; font-size:32px; color:#f87171;">—</h2>
+                </div>
+
+                <div class="card" style="grid-column:span 4;">
+                    <p class="subtitle" style="margin:0 0 6px;">Average Per Transaction</p>
+                    <h2 id="avgSpent" style="margin:0; font-size:32px; color:#fbbf24;">—</h2>
+                </div>
+
+            </div>
         </div>
+    </main>
 
-        <!-- CATEGORY PULSE -->
-        <div class="card" style="grid-column: span 4;">
-          <h3 style="margin:0 0 20px;">Category Pulse</h3>
-          <div id="categoryList">
-            <p class="subtitle">Loading…</p>
-          </div>
-        </div>
-
-        <!-- TOTAL STATS ROW -->
-        <div class="card" style="grid-column: span 4;">
-          <p class="subtitle" style="margin:0 0 6px;">Total Spent (All Time)</p>
-          <h2 id="totalSpent" style="margin:0; font-size:32px; background: linear-gradient(180deg,#fff,#94a3b8); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">—</h2>
-        </div>
-
-        <div class="card" style="grid-column: span 4;">
-          <p class="subtitle" style="margin:0 0 6px;">Highest Single Spend</p>
-          <h2 id="maxSpent" style="margin:0; font-size:32px; color: #f87171;">—</h2>
-        </div>
-
-        <div class="card" style="grid-column: span 4;">
-          <p class="subtitle" style="margin:0 0 6px;">Average Per Transaction</p>
-          <h2 id="avgSpent" style="margin:0; font-size:32px; color: #fbbf24;">—</h2>
-        </div>
-
-      </div>
-    </div>
-  </main>
 </div>
 
-<script src="js/insight.js"></script>
+<script src="/js/insight.js"></script>
 
 </body>
 </html>

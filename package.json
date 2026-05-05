@@ -1,24 +1,17 @@
 {
-  "name": "impulse_guard",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "connect-mongo": "^6.0.0",
-    "cookie-parser": "^1.4.7",
-    "ejs": "^5.0.2",
-    "express": "^5.2.1",
-    "express-session": "^1.19.0",
-    "helmet": "^8.1.0",
-    "mongoose": "^9.6.1"
-  }
+    "name": "impulse_guard",
+    "version": "1.0.0",
+    "description": "Impulse Guard - Offline spending tracker",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "ejs": "^3.1.9",
+        "express": "^4.18.2",
+        "mongoose": "^9.6.1"
+    }
 }

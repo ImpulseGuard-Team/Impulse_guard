@@ -1,47 +1,53 @@
-const express = require('express');
-const router = express.Router();
-const User = require('../models/User');
+const express        = require('express');
+const router         = express.Router();
+const authController = require('../controllers/authController');
 
-const requireAuth = (req, res, next) => {
-  if (req.session && req.session.userId) next();
-  else res.redirect('/login');
-};
-
+// Home page
 router.get('/', (req, res) => {
-  res.render('index');
+    res.render('index');
 });
 
+// Login page
 router.get('/login', (req, res) => {
-  if (req.session.userId) return res.redirect('/dashboard');
-  res.render('login', { error: null });
+    if (authController.isLoggedIn()) {
+        return res.redirect('/dashboard');
+    }
+    res.render('login', { error: null });
 });
 
+// Register page
 router.get('/register', (req, res) => {
-  if (req.session.userId) return res.redirect('/dashboard');
-  res.render('register', { error: null });
+    if (authController.isLoggedIn()) {
+        return res.redirect('/dashboard');
+    }
+    res.render('register', { error: null });
 });
 
-router.get('/dashboard', requireAuth, async (req, res) => {
-  try {
-    const user = await User.findById(req.session.userId);
+// Dashboard - Fetch user from memory/DB
+router.get('/dashboard', (req, res) => {
+    if (!authController.isLoggedIn()) return res.redirect('/login');
+    const user = authController.getCurrentUser();
     res.render('dashboard', { user });
-  } catch (err) {
-    res.redirect('/login');
-  }
 });
 
-router.get('/insight', requireAuth, (req, res) => {
-  res.render('insight');
+// Insights
+router.get('/insight', (req, res) => {
+    if (!authController.isLoggedIn()) return res.redirect('/login');
+    res.render('insight');
 });
 
-router.get('/transactions', requireAuth, async (req, res) => {
-  const user = await User.findById(req.session.userId);
-  res.render('transactions', { user });
+// Transactions
+router.get('/transactions', (req, res) => {
+    if (!authController.isLoggedIn()) return res.redirect('/login');
+    const user = authController.getCurrentUser();
+    res.render('transactions', { user });
 });
 
-router.get('/ai-advisor', requireAuth, async (req, res) => {
-  const user = await User.findById(req.session.userId);
-  res.render('ai-advisor', { user });
+// AI Advisor
+router.get('/ai-advisor', (req, res) => {
+    if (!authController.isLoggedIn()) return res.redirect('/login');
+    const user = authController.getCurrentUser();
+    res.render('ai-advisor', { user });
 });
 
 module.exports = router;

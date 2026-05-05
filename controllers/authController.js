@@ -1,55 +1,60 @@
 const User = require('../models/User');
-const bcrypt = require('bcryptjs');
 
-exports.register = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.render('register', { error: 'Email already registered' });
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, email, password: hashedPassword });
-    await newUser.save();
-    res.redirect('/login');
-  } catch (error) {
-    res.render('register', { error: 'Error registering user' });
-  }
-};
+// Tracks the logged-in user in memory
+// Resets when server restarts
+let currentUser = null;
 
-exports.login = async (req, res) => {
-  try {
+// Check if anyone is logged in
+function isLoggedIn() {
+    return currentUser !== null;
+}
+
+// Get current user object
+function getCurrentUser() {
+    return currentUser;
+}
+
+// Handle login
+async function login(req, res) {
     const { email, password } = req.body;
 
-    if (email === 'admin@mail' && password === 'admin') {
-      let adminUser = await User.findOne({ email: 'admin@mail' });
-      if (!adminUser) {
-        const hashedPassword = await bcrypt.hash('admin', 10);
-        adminUser = new User({ name: 'Admin', email: 'admin@mail', password: hashedPassword });
-        await adminUser.save();
-      }
-      req.session.userId = adminUser._id;
-      return res.redirect('/dashboard');
-    }
+    try {
+        const user = await User.findOne({ email, password }); // Plain text check
 
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.render('login', { error: 'Invalid credentials' });
-    }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.render('login', { error: 'Invalid credentials' });
-    }
-    req.session.userId = user._id;
-    res.cookie('userPref', 'dark_mode', { maxAge: 86400000 });
-    res.redirect('/dashboard');
-  } catch (error) {
-    res.render('login', { error: 'Error logging in' });
-  }
-};
+        if (user) {
+            currentUser = user;
+            return res.redirect('/dashboard');
+        }
 
-exports.logout = (req, res) => {
-  req.session.destroy();
-  res.clearCookie('connect.sid');
-  res.redirect('/login');
-};
+        res.render('login', { error: 'Invalid email or password' });
+    } catch (err) {
+        res.render('login', { error: 'Database error' });
+    }
+}
+
+// Handle registration (Saves to MongoDB)
+async function register(req, res) {
+    const { name, email, password } = req.body;
+
+    try {
+        const existing = await User.findOne({ email });
+        if (existing) {
+            return res.render('register', { error: 'Email already exists' });
+        }
+
+        const newUser = new User({ name, email, password });
+        await newUser.save();
+
+        res.redirect('/login');
+    } catch (err) {
+        res.render('register', { error: 'Error creating account' });
+    }
+}
+
+// Handle logout
+function logout(req, res) {
+    currentUser = null;
+    res.redirect('/login');
+}
+
+module.exports = { isLoggedIn, getCurrentUser, login, register, logout };
